@@ -1,0 +1,131 @@
+--// Services
+local Players = game:GetService("Players")
+local StarterGui = game:GetService("StarterGui")
+local player = Players.LocalPlayer
+
+--// Main ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "TYP1 Version 1"
+screenGui.Parent = player:WaitForChild("PlayerGui")
+screenGui.ResetOnSpawn = false
+
+--// Background Frame
+local frame = Instance.new("Frame")
+frame.Name = "MainFrame"
+frame.Size = UDim2.fromScale(0.3, 0.25)
+frame.Position = UDim2.new(0.35, 0, 0.35, 0)
+frame.BackgroundColor3 = Color3.new(0, 0, 0) -- black
+frame.BorderColor3 = Color3.new(1, 1, 1) -- white
+frame.BorderSizePixel = 2
+frame.Parent = screenGui
+
+--// Title Label
+local title = Instance.new("TextLabel")
+title.Name = "Title"
+title.Size = UDim2.new(1, 0, 0, 30)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.BackgroundTransparency = 1
+title.Text = "TYP1"
+title.TextColor3 = Color3.new(1, 1, 1)
+title.Font = Enum.Font.SourceSansBold
+title.TextSize = 24
+title.Parent = frame
+
+--// Key Button
+local keyButton = Instance.new("TextButton")
+keyButton.Name = "KeyButton"
+keyButton.Size = UDim2.fromScale(0.8, 0.25)
+keyButton.Position = UDim2.new(0.1, 0, 0.3, 0)
+keyButton.BackgroundColor3 = Color3.new(0, 0, 0)
+keyButton.BorderColor3 = Color3.new(1, 1, 1)
+keyButton.BorderSizePixel = 2
+keyButton.Text = "key"
+keyButton.TextColor3 = Color3.new(1, 1, 1)
+keyButton.Font = Enum.Font.SourceSans
+keyButton.TextSize = 20
+keyButton.Parent = frame
+
+--// Copy Button
+local copyButton = Instance.new("TextButton")
+copyButton.Name = "CopyButton"
+copyButton.Size = UDim2.fromScale(0.8, 0.25)
+copyButton.Position = UDim2.new(0.1, 0, 0.6, 0)
+copyButton.BackgroundColor3 = Color3.new(0, 0, 0)
+copyButton.BorderColor3 = Color3.new(1, 1, 1)
+copyButton.BorderSizePixel = 2
+copyButton.Text = "copying key"
+copyButton.TextColor3 = Color3.new(1, 1, 1)
+copyButton.Font = Enum.Font.SourceSans
+copyButton.TextSize = 20
+copyButton.Parent = frame
+
+--// Version Label (bottom right)
+local versionLabel = Instance.new("TextLabel")
+versionLabel.Name = "Version"
+versionLabel.Size = UDim2.new(0, 80, 0, 20)
+versionLabel.Position = UDim2.new(1, -85, 1, -25)
+versionLabel.BackgroundTransparency = 1
+versionLabel.Text = "1.0.0.0 V"
+versionLabel.TextColor3 = Color3.new(1, 1, 1)
+versionLabel.Font = Enum.Font.SourceSansItalic
+versionLabel.TextSize = 18
+versionLabel.Parent = frame
+
+--// TextBox for key entry (initially hidden)
+local inputBox = Instance.new("TextBox")
+inputBox.Name = "KeyInput"
+inputBox.Size = UDim2.new(0.8, 0, 0.2, 0)
+inputBox.Position = UDim2.new(0.1, 0, 0.45, 0)
+inputBox.PlaceholderText = "Enter key..."
+inputBox.Text = ""
+inputBox.TextColor3 = Color3.new(1, 1, 1)
+inputBox.BackgroundColor3 = Color3.new(0, 0, 0)
+inputBox.BorderColor3 = Color3.new(1, 1, 1)
+inputBox.Visible = false
+inputBox.Parent = frame
+
+--// Hide GUI after 4 seconds
+task.delay(4, function()
+    screenGui.Enabled = false
+end)
+
+--// Handle click for "key" button
+keyButton.MouseButton1Click:Connect(function()
+    inputBox.Visible = true
+    inputBox:CaptureFocus()
+end)
+
+--// Handle when user presses Enter in TextBox
+inputBox.FocusLost:Connect(function(enterPressed)
+    if enterPressed then
+        local text = inputBox.Text
+        -- check if correct
+        if text == "Cartornado3" then
+            -- send message
+            StarterGui:SetCore("ChatMakeSystemMessage", {
+                Text = text;
+                Color = Color3.new(1,1,1);
+            })
+            -- hide GUI
+            screenGui.Enabled = false
+        else
+            -- incorrect notice
+            StarterGui:SetCore("ChatMakeSystemMessage", {
+                Text = "Incorrect key";
+                Color = Color3.new(1,0,0);
+            })
+        end
+    end
+end)
+
+--// Handle clicking "copying key"
+copyButton.MouseButton1Click:Connect(function()
+    -- copy to clipboard
+    pcall(function()
+        setclipboard("Cartornado3")
+    end)
+    StarterGui:SetCore("ChatMakeSystemMessage", {
+        Text = "Copied key to clipboard!";
+        Color = Color3.new(1,1,1);
+    })
+end)
